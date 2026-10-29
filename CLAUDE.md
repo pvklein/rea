@@ -94,7 +94,7 @@ lanzar a mano con `bash nube/instalar-entorno.sh`). Las variables quedan en
 | Gradle 8.10.2 (`$GRADLE_8_10`) | instalado | por si un proyecto no trae `gradlew` |
 | Android SDK 35 (`$ANDROID_HOME`) y AGP | **solo si la red permite `dl.google.com`** | `JAVA_HOME=$JAVA_HOME_17 ./gradlew assembleDebug` |
 | REA 6.7.0 (MCP en `.mcp.json`, skill en `.claude/skills/`) | instalado | análisis estático de artefactos que suba el usuario |
-| Ghidra y JADX | **sin instalar** (faltan sus URL en el script y los hosts de GitHub) | REA nativo y Android |
+| Ghidra 12.1.4 (`$GHIDRA_INSTALL_DIR`) y jadx-headless-mcp 0.7.1 (`$REA_JADX_MCP_JAR`) | instalados (en `/opt/rea-herramientas`, el script comprueba su SHA-256; rutas también en `.mcp.json`) | REA nativo y Android; usan el JDK 21 |
 
 Antes de dar algo por bueno, compílalo o pruébalo aquí si se puede, y di claramente lo que no se
 ha podido probar (todo lo que dependa de un aparato real).

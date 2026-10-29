@@ -6,7 +6,11 @@
         "-y",
         "rea-agents@6.7.0",
         "mcp"
-      ]
+      ],
+      "env": {
+        "GHIDRA_INSTALL_DIR": "/opt/rea-herramientas/ghidra_12.1.4_PUBLIC",
+        "REA_JADX_MCP_JAR": "/opt/rea-herramientas/jadx-headless-mcp-0.7.1-all.jar"
+      }
     }
   }
 }

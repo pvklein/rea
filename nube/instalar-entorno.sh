@@ -26,10 +26,13 @@ FICHERO_PERFIL="/etc/profile.d/rea-entorno.sh"
 # ---- Descargas ----
 # cmdline-tools de Android: solo sirve para instalar el resto del SDK, no hace falta la última.
 URL_ANDROID_CMDLINE="https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip"
-# TODO: rellenar con la URL exacta del zip de Ghidra 12.1.4 (sección Releases de su GitHub).
-URL_GHIDRA=""
-# TODO: rellenar con la URL exacta de jadx-headless-mcp-0.7.1-all.jar (la misma que en el PC).
-URL_JADX_MCP=""
+# Ghidra 12.1.4 (necesita JDK 21, que ya trae el contenedor). Unos 543 MB.
+# URL y SHA-256 copiados de la página de la versión Ghidra_12.1.4_build en GitHub.
+URL_GHIDRA="https://github.com/NationalSecurityAgency/ghidra/releases/download/Ghidra_12.1.4_build/ghidra_12.1.4_PUBLIC_20260921.zip"
+SHA_GHIDRA="ddac49f903da9d5bac833e5cc79395098b9c33cfd3279be5f31bd00387d2d4db"
+# jadx-headless-mcp 0.7.1: URL y SHA-256 copiados de REA 6.7.0 (dist/android/JadxRelease.js).
+URL_JADX_MCP="https://github.com/1013503897/jadx-headless-mcp/releases/download/v0.7.1/jadx-headless-mcp-0.7.1-all.jar"
+SHA_JADX_MCP="6e5eacf500b64292bfb73c49797c1958f6ee44646e43e868039ae7feb573ff75"
 
 AVISOS=""
 aviso() {
@@ -38,6 +41,11 @@ aviso() {
 }
 info() {
   echo "[rea-entorno] $1"
+}
+# Devuelve 0 si el fichero $1 tiene la suma SHA-256 $2
+suma_correcta() {
+  SUMA_LEIDA="$(sha256sum "$1" | cut -d ' ' -f 1)"
+  [ "${SUMA_LEIDA}" = "$2" ]
 }
 
 # ---- 1. Paquetes del sistema: JDK 17, Pillow, unzip ----
@@ -107,10 +115,16 @@ fi
 mkdir -p "${DIR_HERRAMIENTAS}"
 if [ "${URL_GHIDRA}" != "" ]; then
   if ! ls -d "${DIR_HERRAMIENTAS}"/ghidra_* >/dev/null 2>&1; then
-    info "Descargando Ghidra..."
-    if curl -fsSL --max-time 600 -o /tmp/ghidra.zip "${URL_GHIDRA}"; then
-      unzip -q -o /tmp/ghidra.zip -d "${DIR_HERRAMIENTAS}" && rm -f /tmp/ghidra.zip
+    info "Descargando Ghidra (unos 543 MB)..."
+    if curl -fsSL --max-time 1200 -o /tmp/ghidra.zip "${URL_GHIDRA}"; then
+      if suma_correcta /tmp/ghidra.zip "${SHA_GHIDRA}"; then
+        unzip -q -o /tmp/ghidra.zip -d "${DIR_HERRAMIENTAS}"
+      else
+        aviso "el zip de Ghidra no tiene la suma SHA-256 esperada: no se instala"
+      fi
+      rm -f /tmp/ghidra.zip
     else
+      rm -f /tmp/ghidra.zip
       aviso "no se pudo descargar Ghidra (hay que permitir github.com y release-assets.githubusercontent.com)"
     fi
   fi
@@ -120,10 +134,16 @@ fi
 if [ "${URL_JADX_MCP}" != "" ]; then
   if [ ! -f "${DIR_HERRAMIENTAS}/jadx-headless-mcp-0.7.1-all.jar" ]; then
     info "Descargando jadx-headless-mcp 0.7.1..."
-    if ! curl -fsSL --max-time 300 -o "${DIR_HERRAMIENTAS}/jadx-headless-mcp-0.7.1-all.jar" "${URL_JADX_MCP}"; then
-      rm -f "${DIR_HERRAMIENTAS}/jadx-headless-mcp-0.7.1-all.jar"
+    if curl -fsSL --max-time 300 -o /tmp/jadx-headless-mcp.jar "${URL_JADX_MCP}"; then
+      if suma_correcta /tmp/jadx-headless-mcp.jar "${SHA_JADX_MCP}"; then
+        mv /tmp/jadx-headless-mcp.jar "${DIR_HERRAMIENTAS}/jadx-headless-mcp-0.7.1-all.jar"
+      else
+        aviso "el jar de jadx-headless-mcp no tiene la suma SHA-256 esperada: no se instala"
+      fi
+    else
       aviso "no se pudo descargar jadx-headless-mcp (hay que permitir github.com y release-assets.githubusercontent.com)"
     fi
+    rm -f /tmp/jadx-headless-mcp.jar
   fi
 else
   aviso "JADX sin instalar: falta URL_JADX_MCP en el script"

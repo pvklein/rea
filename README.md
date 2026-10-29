@@ -30,8 +30,9 @@ en casa (lo filtran el `.bat` y el `.gitignore`).
      de gestores de paquetes). Sin él no se puede compilar ninguna app Android en la nube: de ahí
      salen el SDK y el plugin de Android para Gradle. Pasos:
      <https://code.claude.com/docs/en/cloud-environments#network-access>
-   - Opcional, para Ghidra y JADX en la nube: permite también `github.com` y
-     `release-assets.githubusercontent.com`, y rellena `URL_GHIDRA` y `URL_JADX_MCP` en el script.
+   - Ghidra 12.1.4 y JADX (jadx-headless-mcp 0.7.1) se instalan solos: la red actual ya deja
+     descargar de GitHub Releases. El script comprueba la suma SHA-256 de cada descarga. Ghidra
+     ocupa unos 543 MB y se baja al empezar cada sesión.
 2. **Sube las fuentes**: en el PC, doble clic en `pc\preparar-copia-fuentes.bat` (descárgalo de
    este repo). Revisa la lista que abre en el Bloc de notas y adjunta `REA-fuentes.zip` del
    Escritorio en un chat de Claude con este repo: Claude lo descomprime y lo sube.
