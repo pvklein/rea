@@ -1,0 +1,56 @@
+# ---- Claves y credenciales (nunca al repo) ----
+*.key
+*.keystore
+*.jks
+*.pem
+*.p12
+*_ed25519
+*_ed25519.pub
+id_rsa*
+local.properties
+.env
+
+# ---- APK y artefactos de compilación ----
+*.apk
+*.apks
+*.aab
+*.dex
+build/
+.gradle/
+.idea/
+.kotlin/
+*.class
+__pycache__/
+*.pyc
+node_modules/
+
+# ---- Carpetas de C:\REA que no son fuentes ----
+apks/
+copia-galaxy-a10/
+copia-huawei-p8lite/
+tagus-backup/
+backups/
+resultados/
+
+# ---- Datos personales y ficheros grandes ----
+*.db
+*.sqlite
+*.sqlite3
+*.db-journal
+*.csv
+*.onnx
+*.zip
+*.tar.bz2
+*.jpg
+*.jpeg
+*.heic
+*.mp4
+*.mkv
+*.webm
+*.mp3
+*.wav
+*.m4a
+*.acsm
+*.epub
+*.lcpl
+*.pdf

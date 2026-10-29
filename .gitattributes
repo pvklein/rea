@@ -1,0 +1,8 @@
+# Los scripts de Windows se guardan tal cual, con CRLF, para que funcionen
+# también al descargarlos sueltos desde la web de GitHub
+*.bat -text
+*.cmd -text
+*.ps1 -text
+# Los de Linux, siempre LF
+*.sh  text eol=lf
+*.py  text eol=lf
